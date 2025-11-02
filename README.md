@@ -1,9 +1,5 @@
 # MobileNetV2-WebAPP
-Aplicação Web para criação de dataset, treinamento e reconhecimento de imagens de objetos diversos nas categorias CONFORME e NÃO CONFORME
-
-# Sistema de Reconhecimento por Imagem com Flask e MobileNetV2
-
-## Descrição do Projeto
+Aplicação Web para criação de dataset, treinamento e reconhecimento de imagens de objetos diversos nas categorias CONFORME e NÃO CONFORME.
 
 O sistema tem como objetivo realizar **reconhecimento de objetos** utilizando **aprendizado de máquina** com redes neurais baseadas na arquitetura **MobileNetV2**.  
 Seu funcionamento está dividido em **três etapas principais**: Captura, Treinamento e Classificação.
