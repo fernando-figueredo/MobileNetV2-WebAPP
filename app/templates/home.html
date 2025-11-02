@@ -1,0 +1,51 @@
+{% extends 'base.html '%}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<div class="jumbotron" id="texto-inicial">
+ <h3 class="fs-3">Este programa consiste em utilizar redes neurais artificiais para treinar exemplos de imagens e posteriormente classificá-las. Escolha a sua opção abaixo:</h3>
+ <hr class="my-4">
+
+ <br />
+ <br />
+<div class="container mt-4">
+  <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+
+    <!-- Botão 1 -->
+    <form action="{{url_for('capturar')}}" id="cap" method="POST" class="m-0">
+      <button class="btn btn-primary btn-lg px-5" type="submit" role="button" style="min-width:150px;">
+        1. CAPTURAR
+      </button>
+    </form>
+
+    <!-- Seta entre botão 1 e 2 -->
+    <img src="{{ url_for('static', filename='images/seta-pequena.png') }}" alt="Seta" class="mx-3" style="height:24px; user-select:none;" />
+
+    <!-- Botão 2 -->
+    <form action="{{url_for('treinar')}}" id="trei" method="POST" class="m-0">
+      <button class="btn btn-primary btn-lg px-5" type="submit" role="button" style="min-width:150px;">
+        2. TREINAR
+      </button>
+    </form>
+
+    <!-- Seta entre botão 2 e 3 -->
+    <img src="{{ url_for('static', filename='images/seta-pequena.png') }}" alt="Seta" class="mx-3" style="height:24px; user-select:none;" />
+
+    <!-- Botão 3 -->
+    <form action="{{url_for('classificar')}}" id="classi" method="GET" class="m-0">
+      <button class="btn btn-primary btn-lg px-5" type="submit" role="button" style="min-width:150px;">
+        3. CLASSIFICAR
+      </button>
+    </form>
+
+  </div>
+</div>
+
+</div>
+</div>
+
+{% endblock %}

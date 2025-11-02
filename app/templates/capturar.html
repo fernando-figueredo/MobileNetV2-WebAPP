@@ -1,0 +1,170 @@
+{% extends 'base.html '%}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-3">
+  <div class="d-flex justify-content-start">
+    <a href="{{ url_for('index') }}" class="btn btn-secondary rounded-circle p-2" style="width: 40px; height: 40px;">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="jumbotron" id="texto-inicial">
+    <h3 class="fs-3">1. CAPTURAR</h3>
+    </br>
+
+
+  <div class="row align-items-start">
+    <!-- Coluna com a imagem da câmera -->
+    <div class="col-md-8">
+      <div class="camera-container border rounded p-2 position-relative">
+        <img id="camera-feed" src="{{ url_for('video_feed') }}" class="img-fluid" alt="Câmera ao vivo">
+        <canvas id="draw-canvas" width="640" height="480" style="position: absolute; top: 0; left: 0; z-index: 10;"></canvas>
+      </div>
+    </div>
+
+    <!-- Coluna com botões e contadores -->
+    <div class="col-md-4 d-flex flex-column gap-3 justify-content-start mt-2">
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+      <!-- Botão Categoria CONFORME -->
+      <div class="d-flex align-items-center justify-content-between">
+        <form class="form-captura" data-tipo="conforme">
+          <button class="btn btn-success btn-lg w-100 me-2" type="submit">Capturar Conforme</button>
+        </form>
+        <span class="badge bg-secondary ms-2" id="contador-a">{{ contador_a }}</span>
+      </div>
+    </br>
+    </br>
+    </br>
+
+
+      <!-- Botão Categoria NÃO CONFORME -->
+      <div class="d-flex align-items-center justify-content-between">
+        <form class="form-captura" data-tipo="nao_conforme">
+          <button class="btn btn-danger btn-lg w-100 me-2" type="submit">Capturar Não Conforme</button>
+        </form>
+        <span class="badge bg-secondary ms-2" id="contador-b">{{ contador_b }}</span>
+      </div>
+
+  </div>
+    </div>
+  </div>
+
+<div class="row mt-5">
+  <div class="col d-flex justify-content-center flex-wrap">
+<form action="{{ url_for('trocar_camera') }}" method="POST" class="mx-3 my-2">
+  <input type="hidden" name="next_page" value="capturar">
+  <button class="btn btn-primary px-4">Trocar Câmera</button>
+</form>
+
+
+      <button id="btn-desenhar" class="btn btn-primary mx-3 my-2 px-4">Desenhar Área de Interesse</button>
+
+  </div>
+</div>
+
+    </br>
+    </br>
+
+
+</div>
+
+
+<script>
+const canvas = document.getElementById("draw-canvas");
+const ctx = canvas.getContext("2d");
+const btnDesenhar = document.getElementById("btn-desenhar");
+
+let roi = null;
+let isDrawing = false, startX = 0, startY = 0;
+
+btnDesenhar.addEventListener("click", () => {
+  roi = null;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  alert("Desenhe a área de interesse com o mouse sobre a imagem da câmera.");
+});
+
+// Lógica para desenhar a ROI
+canvas.addEventListener("mousedown", e => {
+  const rect = canvas.getBoundingClientRect();
+  startX = e.clientX - rect.left;
+  startY = e.clientY - rect.top;
+  isDrawing = true;
+});
+
+canvas.addEventListener("mousemove", e => {
+  if (!isDrawing) return;
+  const rect = canvas.getBoundingClientRect();
+  const currentX = e.clientX - rect.left;
+  const currentY = e.clientY - rect.top;
+  const w = currentX - startX;
+  const h = currentY - startY;
+
+  roi = { x: startX, y: startY, w, h };
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(roi.x, roi.y, roi.w, roi.h);
+});
+
+canvas.addEventListener("mouseup", () => {
+  isDrawing = false;
+});
+
+// Captura e envia a ROI para a rota /desenhar_area
+document.querySelectorAll("form.form-captura").forEach(form => {
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    if (!roi) {
+      alert("Por favor, desenhe uma área de interesse antes de capturar.");
+      return;
+    }
+
+    const videoImg = document.getElementById("camera-feed");
+    const tempCanvas = document.createElement("canvas");
+    const tempCtx = tempCanvas.getContext("2d");
+
+    const absW = Math.abs(roi.w);
+    const absH = Math.abs(roi.h);
+    tempCanvas.width = absW;
+    tempCanvas.height = absH;
+
+    tempCtx.drawImage(videoImg, roi.x, roi.y, absW, absH, 0, 0, absW, absH);
+
+    tempCanvas.toBlob(blob => {
+      const formData = new FormData();
+      const tipo = form.dataset.tipo; // 'conforme' ou 'nao_conforme'
+      formData.append("imagem", blob);
+      formData.append("tipo", tipo);
+
+      fetch("/desenhar_area", {
+        method: "POST",
+        body: formData
+      }).then(res => {
+        if (res.ok) {
+          alert("Imagem capturada como " + tipo);
+        } else {
+          alert("Erro ao capturar imagem");
+        }
+      });
+    }, "image/jpeg");
+  });
+});
+</script>
+
+
+
+
+{% endblock %}

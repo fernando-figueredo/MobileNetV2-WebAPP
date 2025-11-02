@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <div class="d-flex justify-content-start">
+    <a href="{{ url_for('index') }}" class="btn btn-secondary rounded-circle p-2" style="width: 40px; height: 40px;">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="jumbotron" id="texto-inicial">
+    <h3 class="fs-3">3. CLASSIFICAR</h3>
+    </br>
+
+    <div class="row align-items-start">
+      <!-- Coluna com a imagem da câmera -->
+      <div class="col-md-8">
+        <div class="camera-container border rounded p-2 position-relative">
+          <video id="camera-feed" autoplay playsinline width="640" height="480" style="border: 1px solid #ccc;"></video>
+          <canvas id="draw-canvas" width="640" height="480" style="position: absolute; top: 0; left: 0; z-index: 10;"></canvas>
+        </div>
+      </div>
+
+      <!-- Coluna com botão de classificar -->
+      <div class="col-md-4 d-flex flex-column gap-3 justify-content-start mt-2">
+        </br></br></br></br></br></br>
+        <button id="btn-classificar" class="btn btn-primary btn-lg w-100">Classificar</button>
+        <div id="resultado-classificacao" class="mt-3 fs-2 fw-bold text-center border rounded p-3 bg-light"></div>
+      </div>
+    </div>
+
+    <!-- Botões abaixo do bloco principal -->
+    <div class="row mt-5">
+      <div class="col d-flex justify-content-center flex-wrap">
+        <form action="{{ url_for('trocar_camera') }}" method="POST" class="mx-3 my-2">
+        <input type="hidden" name="next_page" value="classificar">
+        <button class="btn btn-primary px-4">Trocar Câmera</button>
+        </form>
+        <button id="btn-desenhar" class="btn btn-primary mx-3 my-2 px-4">Desenhar Área de Interesse</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById("draw-canvas");
+const ctx = canvas.getContext("2d");
+const btnDesenhar = document.getElementById("btn-desenhar");
+
+let roi = null;
+let isDrawing = false, startX = 0, startY = 0;
+
+btnDesenhar.addEventListener("click", () => {
+  roi = null;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  alert("Desenhe a área de interesse com o mouse sobre a imagem da câmera.");
+});
+
+canvas.addEventListener("mousedown", e => {
+  const rect = canvas.getBoundingClientRect();
+  startX = e.clientX - rect.left;
+  startY = e.clientY - rect.top;
+  isDrawing = true;
+});
+
+canvas.addEventListener("mousemove", e => {
+  if (!isDrawing) return;
+  const rect = canvas.getBoundingClientRect();
+  const currentX = e.clientX - rect.left;
+  const currentY = e.clientY - rect.top;
+
+  roi = { x: startX, y: startY, w: currentX - startX, h: currentY - startY };
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "red";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(roi.x, roi.y, roi.w, roi.h);
+});
+
+canvas.addEventListener("mouseup", () => {
+  isDrawing = false;
+});
+
+document.getElementById("btn-classificar").addEventListener("click", () => {
+  if (!roi || roi.w === 0 || roi.h === 0) {
+    alert("Desenhe a área de interesse antes de classificar.");
+    return;
+  }
+
+  const video = document.getElementById("camera-feed");
+  const tempCanvas = document.createElement("canvas");
+  const tempCtx = tempCanvas.getContext("2d");
+
+  const absW = Math.abs(roi.w);
+  const absH = Math.abs(roi.h);
+  tempCanvas.width = absW;
+  tempCanvas.height = absH;
+
+  tempCtx.drawImage(video, roi.x, roi.y, absW, absH, 0, 0, absW, absH);
+
+  tempCanvas.toBlob(blob => {
+    const formData = new FormData();
+    formData.append("imagem", blob);
+
+
+
+
+
+
+
+
+    fetch("/classificar", {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('resultado-classificacao').innerText = "Resultado: " + data.resultado;
+    })
+    .catch(() => {
+      alert("Erro ao classificar a imagem.");
+    });
+  }, "image/jpeg");
+});
+
+
+
+
+
+
+
+
+
+// Iniciar câmera
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    const video = document.getElementById("camera-feed");
+    video.srcObject = stream;
+  })
+  .catch(err => {
+    alert("Erro ao acessar a câmera: " + err);
+  });
+</script>
+{% endblock %}

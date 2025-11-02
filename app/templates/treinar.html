@@ -1,0 +1,81 @@
+{% extends 'base.html '%}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-3">
+  <div class="d-flex justify-content-start">
+    <a href="{{ url_for('index') }}" class="btn btn-secondary rounded-circle p-2" style="width: 40px; height: 40px;">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="jumbotron" id="texto-inicial">
+    <h3 class="fs-3">2. TREINAR</h3>
+    </br>
+
+<div class="container mt-4">
+  <h2>Resumo do Treinamento</h2>
+
+  <p><strong>Acurácia (treino):</strong> {{ acc | default(0) | round(4) }}</p>
+  <p><strong>Acurácia (validação):</strong> {{ val_acc | default(0) | round(4) }}</p>
+  <p><strong>Loss (treino):</strong> {{ loss | default(0) | round(4) }}</p>
+  <p><strong>Loss (validação):</strong> {{ val_loss | default(0) | round(4) }}</p>
+
+  <hr>
+
+  <h4>Métricas por classe</h4>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Classe</th>
+        <th>Precisão</th>
+        <th>Revocação</th>
+        <th>F1-score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for classe, valores in report.items() %}
+        {% if classe in ['Conforme', 'Naoconforme'] %}
+        <tr>
+          <td>{{ classe }}</td>
+          <td>{{ valores.precision | default(0) | round(4) }}</td>
+          <td>{{ valores.recall | default(0) | round(4) }}</td>
+          <td>{{ valores['f1-score'] | default(0) | round(4) }}</td>
+        </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h4>Matriz de Confusão</h4>
+  <table class="table table-bordered text-center">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Predito: Conforme</th>
+        <th>Predito: Naoconforme</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Verdadeiro: Conforme</th>
+        <td>{{ matriz[0][0] }}</td>
+        <td>{{ matriz[0][1] }}</td>
+      </tr>
+      <tr>
+        <th>Verdadeiro: Naoconforme</th>
+        <td>{{ matriz[1][0] }}</td>
+        <td>{{ matriz[1][1] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

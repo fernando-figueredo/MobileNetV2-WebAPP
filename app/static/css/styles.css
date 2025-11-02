@@ -1,0 +1,167 @@
+#imageTeste{
+  display: none
+}
+
+span:hover + #imageTeste{
+  display: block;
+}
+
+#logo{
+  height: 60px;
+  padding-right: 30px;
+}
+
+#logo-if{
+  width: 200px; 
+  height: auto;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+#navbarNav{
+  padding-left: 50px;
+  text-align: center;
+}
+
+#texto-inicial{
+  background-color: #ffffff;
+}
+
+#texto-solicitacao{
+background-color: #ffffff;
+padding-bottom: 5px;
+}
+
+#tela-login{
+  padding-top: 50px;
+}
+
+#entrada-dados{
+  padding-bottom:20px;
+}
+
+
+body {
+  padding-bottom: 10px;
+}
+
+nav{
+  background: #1b12a0;
+}
+
+footer{
+width: 100%;
+line-height: 60px;
+background: #1b12a0;
+color: #fff;
+padding: 20px 0 0;
+}
+
+
+footer img {
+  float: right;
+  width: 120px;
+  margin-right: 7%;
+  margin-top: 2%;
+}
+footer span {
+  float: left;
+  margin-left: 7%;
+  margin-top: 2%;
+  font-weight: bold;
+}
+
+#containerC {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+   animation: colors 4s infinite;
+}
+
+#halfclip {
+  width: 50%;
+  height: 100%;
+  right: 0px;
+  position: absolute;
+   overflow: hidden;
+   transform-origin: left center;
+   animation: cliprotate 2s steps(2) infinite;
+   -webkit-animation: cliprotate 2s steps(2) infinite;
+}
+
+.halfcircle {
+  box-sizing: border-box;
+  height: 100%;
+  right: 0px;
+  position: absolute;
+  border: solid 25px transparent;
+   border-top-color: blue;
+   border-left-color: blue;
+   border-radius: 50%;
+}
+
+#clipped {
+  width: 200%;
+   animation: rotate 1s linear infinite;
+   -webkit-animation: rotate 1s linear infinite;
+}
+
+#fixed {
+  width: 100%;
+    transform: rotate(135deg);  
+   animation: showfixed 2s steps(2) infinite;
+   -webkit-animation: showfixed 2s linear infinite;
+}
+
+iframe {
+  display: block;
+  margin: 0 auto;
+}
+
+@-webkit-keyframes cliprotate {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+@keyframes cliprotate {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+
+@-webkit-keyframes rotate {
+  0% {transform: rotate(-45deg);}
+  100% {transform: rotate(135deg);}
+}
+
+@keyframes rotate {
+  0% {transform: rotate(-45deg);}
+  100% {transform: rotate(135deg);}
+}
+
+@-webkit-keyframes showfixed {
+  0% {opacity: 0;}
+  49.9% {opacity: 0;}
+  50% {opacity: 1;}
+ 100% {opacity: 1;}
+}
+
+html, body {
+             height: 100%;
+             margin: 0pt;
+        }
+        .Frame {
+             display: table;
+             height: 100%;
+             width: 100%;
+        }
+        .Row {
+             display: table-row;
+             height: 1px;
+        }
+        .Row.Expand {
+             height: 50px;
+        }
+
+
+
