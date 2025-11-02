@@ -71,6 +71,7 @@ A aplicação estará disponível em:
 ---
 
 ## Estrutura Simplificada do Projeto
+```bash
 
 ├───app
 │   ├───controllers
