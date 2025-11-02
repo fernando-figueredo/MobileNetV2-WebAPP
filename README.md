@@ -42,7 +42,7 @@ cd SEU_REPOSITORIO
 ```bash
 python -m venv venv
 source venv/bin/activate       # Linux/macOS
-.env\Scriptsctivate        # Windows
+.\env\Scripts\ctivate        # Windows
 ```
 
 ### 3. Instale as dependências
@@ -71,6 +71,7 @@ A aplicação estará disponível em:
 ---
 
 ## Estrutura Simplificada do Projeto
+
 ├───app
 │   ├───controllers
 │   ├───models
@@ -80,7 +81,8 @@ A aplicação estará disponível em:
 │   │   │   ├───Conforme
 │   │   │   └───Naoconforme
 │   │   └───images
-│   ├───templates
+│   └───templates
+│  
 ├───Datasets Desenvolvidos
 │   ├───Dataset Maçãs (10 50 e 100)
 │   │   ├───Conforme10
@@ -116,6 +118,7 @@ A aplicação estará disponível em:
 │       ├───Naoconforme10
 │       ├───Naoconforme100
 │       └───Naoconforme50
+
 ```
 
 ---
