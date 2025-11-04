@@ -16,7 +16,7 @@ model = None
 if os.path.exists(model_path):
     modelo_global = load_model(model_path)
 else:
-    print("⚠️ Modelo ainda não treinado. A rota de classificação estará indisponível até o treino.")
+    print("Modelo ainda não treinado. A rota de classificação estará indisponível até o treino.")
 
 
 camera_index = 0
@@ -88,7 +88,7 @@ def classificar():
         img = img.astype("float32") / 255.0
         img = np.expand_dims(img, axis=0)
 
-        # Carregar modelo se necessário
+        # Carregar modelo
         if modelo_global is None:
             caminho_modelo = os.path.join("app", "models", "modelo_mobilenetv2.h5")
             if not os.path.exists(caminho_modelo):
@@ -103,7 +103,6 @@ def classificar():
 
         return jsonify({"resultado": resultado})
 
-    # GET: mostra a página
     return render_template("classificar.html")
 
 def gen_frames():
@@ -112,7 +111,6 @@ def gen_frames():
         if not success:
             break
         else:
-            # Codifica o frame em JPEG
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
 
@@ -157,17 +155,12 @@ def desenhar_area():
 
     # Escolhe a subpasta conforme o tipo
     pasta = os.path.join(pasta_base, 'Conforme' if tipo == 'conforme' else 'Naoconforme')
-
-    # Cria a pasta se ela não existir
     os.makedirs(pasta, exist_ok=True)
 
-    # Cria um timestamp para nomear a imagem
+    # Timestamp para nomear a imagem
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
-    # Caminho completo para salvar a imagem
     caminho = os.path.join(pasta, f'{tipo}_{timestamp}.jpg')
-
-    # Salva a imagem no caminho determinado
     imagem.save(caminho)
 
     return 'OK'
@@ -181,7 +174,6 @@ def trocar_camera():
     camera.release()
     camera = cv2.VideoCapture(camera_index)
 
-    # Pega o nome da página atual que vem no form
     next_page = request.form.get('next_page', 'capturar')
 
     return redirect(url_for(next_page))

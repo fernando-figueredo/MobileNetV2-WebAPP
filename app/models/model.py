@@ -50,13 +50,10 @@ def treinar_modelo(dataset_path, img_size=(224, 224), batch_size=32, epochs=5):
 
     history = model.fit(train_generator, validation_data=val_generator, epochs=epochs)
 
-    # Caminho absoluto para a pasta do projeto Flask
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # controllers/default.py
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 
-    # Caminho relativo ao projeto Flask
     MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, '..', 'models', 'modelo_mobilenetv2.h5'))
-
-    # Cria pasta se necessário
+    
     os.makedirs(os.path.dirname(MODEL_PATH), exist_ok=True)
 
     model.save(MODEL_PATH)
