@@ -18,13 +18,12 @@
     </br>
 
     <div class="row align-items-start">
-
-      <div class="col-md-8">
-        <div class="camera-container border rounded p-2 position-relative">
-          <video id="camera-feed" autoplay playsinline width="640" height="480" style="border: 1px solid #ccc;"></video>
-          <canvas id="draw-canvas" width="640" height="480" style="position: absolute; top: 0; left: 0; z-index: 10;"></canvas>
-        </div>
+    <div class="col-md-8">
+      <div class="camera-container border rounded p-2 position-relative">
+        <img id="camera-feed" src="{{ url_for('video_feed') }}" class="img-fluid" alt="Câmera ao vivo">
+        <canvas id="draw-canvas" width="640" height="480" style="position: absolute; top: 0; left: 0; z-index: 10;"></canvas>
       </div>
+    </div>
 
       <div class="col-md-4 d-flex flex-column gap-3 justify-content-start mt-2">
         </br></br></br></br></br></br>
